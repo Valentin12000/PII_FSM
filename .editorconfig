@@ -2,7 +2,6 @@ is_global = true
 root = true
 
 ; [*.cs]
-dotnet_diagnostic.IDE0090.severity = none
 dotnet_diagnostic.CA1024.severity = none
 dotnet_diagnostic.CA1062.severity = none
 dotnet_diagnostic.CA1303.severity = none
@@ -14,3 +13,15 @@ dotnet_diagnostic.CA1724.severity = none
 dotnet_diagnostic.CA2000.severity = none
 dotnet_diagnostic.CA2007.severity = none
 dotnet_diagnostic.SA1623.severity = none
+
+# Default severity for all analyzer diagnostics
+dotnet_analyzer_diagnostic.severity = silent
+
+# CS1591: Missing XML comment for publicly visible type or member
+dotnet_diagnostic.CS1591.severity = none
+
+# IDE0055: Fix formatting
+dotnet_diagnostic.IDE0055.severity = none
+
+# SA1028: Code should not contain trailing whitespace
+dotnet_diagnostic.SA1028.severity = none

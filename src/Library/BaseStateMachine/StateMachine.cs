@@ -1,6 +1,8 @@
 
 
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Ucu.Poo.Fsm
@@ -9,14 +11,18 @@ namespace Ucu.Poo.Fsm
     {
         private State baseState;
         public State currentState{set; get;}
-        private List<State> states;
+        //private List<State> states;
+        private Dictionary<Type, State> states;
+        public ReadOnlyCollection<State> States{get {return this.states.Values.ToList().AsReadOnly<State>();}}
 
 
-        public StateMachine(State baseState = null, List<State> states)
+        public StateMachine(List<State> states, State baseState = null)
         {
             this.baseState = baseState;
-            this.states = new List<State>();
-            this.states.AddRange(states);
+            foreach(State state in states)
+            {
+                this.AddState(state);
+            }
 
             if(baseState == null)
             {
@@ -28,17 +34,34 @@ namespace Ucu.Poo.Fsm
 
         public void AddState(State state)
         {
-            states.Add(state);
+            Type newStateType = state.GetType();
+            if(!this.states.ContainsKey(newStateType))
+            {
+                this.states.Add(newStateType, state);
+            }
         }
 
         public bool ProcessInput(Input input)
         {
-            //zzz
+            State newState = currentState.GetNextState(input);
+            if(newState == null) return false;
+
+            currentState.OnExit();
+            currentState = states.GetValueOrDefault(newState.GetType());
+            currentState.OnEnter();
+            return true;
         }
 
-        // public bool ProcessInputs(Input[] input)
-        // {
-            
-        // }
+        public bool ProcessInputs(Input[] inputs)
+        {
+            bool didChange = false;
+
+            foreach(Input input in inputs)
+            {
+                if(ProcessInput(input)) didChange = true;
+            }
+
+            return didChange;
+        }
     }
 }

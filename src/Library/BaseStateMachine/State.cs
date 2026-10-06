@@ -34,14 +34,8 @@ namespace Ucu.Poo.Fsm
             return nextState;
         }
 
-        public void OnEnter()
-        {
-            
-        }
+        public virtual void OnEnter(){}
 
-        public void OnExit()
-        {
-            
-        }
+        public virtual void OnExit(){}
     }
 }
